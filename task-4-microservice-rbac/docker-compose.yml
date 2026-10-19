@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      - AUTH_PORT=5001
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+    command: node services/auth-service.js
+    restart: unless-stopped
+
+  api-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-service
+    ports:
+      - "5002:5002"
+    environment:
+      - API_PORT=5002
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: node services/api-service.js
+    restart: unless-stopped
+
+  worker-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker-service
+    ports:
+      - "5003:5003"
+    environment:
+      - WORKER_PORT=5003
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: node services/worker-service.js
+    restart: unless-stopped
+
+networks:
+  default:
+    name: microservice-network

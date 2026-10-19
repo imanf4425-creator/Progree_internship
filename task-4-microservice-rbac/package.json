@@ -1,0 +1,24 @@
+{
+  "name": "microservice-rbac",
+  "version": "1.0.0",
+  "description": "Role-Based Microservice with JWT and Message Broker",
+  "main": "index.js",
+  "scripts": {
+    "auth": "node services/auth-service.js",
+    "api": "node services/api-service.js",
+    "worker": "node services/worker-service.js",
+    "test": "node test.js"
+  },
+  "keywords": ["microservice", "jwt", "rbac", "rabbitmq", "docker"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "amqplib": "^0.10.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3"
+  }
+}

@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+*/node_modules/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+chat-logs.txt
+
+# Environment variables
+.env
+.env.local
+
+# Build outputs
+build/
+dist/
+*/build/
+*/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Temporary files
+*.tmp
+*.temp
